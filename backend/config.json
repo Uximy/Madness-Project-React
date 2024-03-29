@@ -1,0 +1,27 @@
+{
+    "hostname": "domain",
+    "port": "3005",
+    "apiKey": "apiKey_steam",
+    "secretKey": "secretKey",
+    "rcon_password": "rcon_password",
+    "freekassa": {
+        "merchantId": "merchantId",
+        "secretKey_1": "secretKey_1",
+        "secretKey_2": "secretKey_2"
+    },
+    "mail": {
+        "user": "login_email",
+        "password_key": "password_key_app"
+    },
+    "database_lvlrank":{
+        "ip_db": "ip_db",
+        "user": "user_name",
+        "database": "name_database_lvl_rank",
+        "password": "password"
+    },
+    "database_ReactDB":{
+        "username": "user_name",
+        "databaseName": "databaseName",
+        "password": "password"
+    }
+}

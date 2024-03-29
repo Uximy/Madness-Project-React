@@ -1,0 +1,64 @@
+.messageDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    position: absolute;
+    border: solid 2px rgba(255, 255, 255, 0.05);
+    background-color: #171616;
+    color: #ffffff99;
+    left: 100px;
+    padding: 5px;
+    max-width: 350px;
+    transform: translateX(-10000px);
+    opacity: 0;
+    transition-property: transform opacity;
+    transition-duration: 3s;
+    transition-timing-function: ease-in-out;
+    z-index: 999;
+}
+
+.start {
+    opacity: 1;
+    transform: translateX(0px);
+}
+
+.end {
+    opacity: 0;
+    transform: translateX(-10000px);
+}
+
+.messageStrip {
+    width: 5px;
+}
+
+.messageDiv h3 {
+    text-align: center;
+    margin: 0 auto 0 auto;
+}
+
+.messageDiv p {
+    padding: 0 10px 5px 10px;
+}
+
+.messageDiv button {
+    position: absolute;
+    padding: 5px;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    background-color: #171616;
+    color: #ffffff99;
+    transition-property: color transform;
+    transition-duration: .4s;
+    transition-timing-function: ease-in-out;
+}
+
+.messageDiv button:hover {
+    color: #ff0000;
+    transform: rotate(90deg);
+}
+
+.messageDiv .wrapper {
+    display: flex;
+    justify-content: flex-end;
+}

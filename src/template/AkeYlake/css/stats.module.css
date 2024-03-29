@@ -1,0 +1,255 @@
+@media only screen and (min-device-width: 320px) and (max-device-width: 1100px) {
+    body {
+        min-width: 1100px;
+    }
+}
+
+.statsContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border: solid 2px rgba(255, 255, 255, 0.05);
+    margin-bottom: 20px;
+}
+
+.statsContainer h1 {
+    color: #ffffff99;
+    padding: 0px 50px;
+    /* margin: 15px 180px 15px 310px; */
+}
+
+header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 5px 0px;
+    /* gap: 180px; */
+}
+
+.dropdownContent a {
+    display: none;
+    width: 87px;
+}
+
+.dropdownContent a.selected {
+    position: relative;
+    /* left: 20px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: #ffffff99;
+    text-decoration: none;
+    padding: 10px 15px;
+    border: solid 2px rgba(255, 255, 255, 0.05);
+    /* margin: 15px 0 0 0; */
+    transition: all .4s ease-in-out;
+    /* width: 70px; */
+}
+
+.dropdownContent p {
+    margin: 0;
+}
+
+.dropdownContent a.selected:hover {
+    color: #fff;
+    border: solid 2px #c12c2c;
+}
+
+.playerList {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px
+}
+
+.playerList div {
+    display: grid;
+    color: #ffffff99;
+    grid-template-columns: repeat(7, minmax(70px, 1fr));
+    align-items: center;
+    text-align: center;
+    gap: 50px;
+    margin: 10px 60px;
+}
+
+.dropdownContent:hover a:not(.selected) {
+    position: absolute;
+    display: block;
+    z-index: 1;
+    padding: 10px 15px;
+    color: #ffffff99;
+    text-decoration: none;
+    border: solid 2px rgba(255, 255, 255, 0.05);
+    transition: color .4s ease-in-out;
+}
+
+.dropdownContent a:not(.selected):hover {
+    color: #fff;
+}
+
+.statsAvatar {
+    width: 33px;
+    height: 33px;
+    object-fit: cover;
+    border: solid 2px rgba(255, 255, 255, 0.05);
+    transition: border .4s ease-in-out;
+}
+
+.aAvatar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 15px 5px;
+    gap: 15px;
+    text-decoration: none;
+    color: #ffffff99;
+    transition: color .4s ease-in-out;
+}
+
+.statsPlayer:nth-child(2) .aAvatar:hover .statsAvatar{
+    border: solid 2px #c12c2c;
+}
+
+.statsPlayer:nth-child(2) .aAvatar:hover {
+    color: #c12c2c;
+}
+
+.statsPlayer:nth-child(2) p:first-Child {
+    color: #c12c2c;
+}
+
+.statsPlayer:nth-child(3) .aAvatar:hover .statsAvatar{
+    border: solid 2px #FFD700;
+}
+
+.statsPlayer:nth-child(3) .aAvatar:hover {
+    color: #FFD700;
+}
+
+.statsPlayer:nth-child(3) p:first-child {
+    color: #FFD700;
+}
+
+
+.statsPlayer:nth-child(4) .aAvatar:hover {
+    color: #fff;
+}
+
+.statsPlayer:nth-child(4) p:first-child {
+    color: #C0C0C0;
+}
+
+.statsPlayer:nth-child(4) .aAvatar:hover .statsAvatar{
+    border: solid 2px #fff;
+}
+
+.statsPlayer:nth-child(5) .aAvatar:hover {
+    color: #CD7F32;
+}
+
+.statsPlayer:nth-child(5) p:first-child {
+    color: #CD7F32;
+}
+
+.statsPlayer:nth-child(5) .aAvatar:hover .statsAvatar{
+    border: solid 2px #CD7F32;
+}
+
+.statsPlayer .aAvatar:hover {
+    color: #fff;
+}
+
+.statsPlayer p:first-child {
+    font-size: 33px;
+    margin: 0;
+}
+
+.rankIcon img {
+    height: 33px;
+    object-fit: cover;
+}
+
+.statsPlayer p:first-child span{
+    font-size: 35px;
+}
+
+.statsPlayer {
+    border-bottom: solid 2px rgba(255, 255, 255, 0.05);
+}
+
+.statsPlayer:last-child {
+    border-bottom: 0px;
+}
+
+.statsPlayer:nth-child(12) p{
+    color: #ffffff50;
+}
+
+.choiseServer {
+    /* margin-left: 300px; */
+    width: 220px;
+}
+
+.choiseServerTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: solid 2px rgba(255, 255, 255, 0.05);
+}
+
+.choiseServer span{
+    margin-left: auto;
+    color: #ffffff99;
+    padding-right: 10px;
+    transition: all .5s ease-in-out;
+}
+
+.choiseServer>.choiseServerTitle>a{
+    display: inline-block;
+    padding: 10px 20px;
+}
+
+.choiseServer a{
+    text-decoration: none;
+    color: #ffffff99;
+    transition: all .5s ease-in-out;
+}
+
+.choiseServer .choiseServerTitle:hover a, .choiseServer .choiseServerTitle:hover span{
+    color: #fff;
+}
+
+.choiseServer .headerStatsMenu {
+    margin-top: 0;
+    background: #171616;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    height: auto;
+    border-bottom: 0px;
+    padding-left: 0px;
+    opacity: 0;
+    z-index: -1;
+    width: 216px;
+    border: solid 2px rgba(255, 255, 255, 0.05);
+    transition: all .5s ease-in-out;
+}
+
+.choiseServer:hover .headerStatsMenu {
+    opacity: 1;
+    z-index: 2;
+    transform: translateY(0);
+}
+
+.choiseServer .headerStatsMenu li:hover a{
+    color: #fff;
+}
+
+.choiseServer .headerStatsMenu a{
+    display: inline-block;
+    padding: 10px 20px 10px 20px;
+}

@@ -1,0 +1,74 @@
+@media only screen and (min-device-width: 320px) and (max-device-width: 636px) {
+    body {
+        min-width: 636px;
+    }
+
+    div.container {
+        max-width: 636px;
+        width: 100%;
+    }
+
+    div.rules {
+        max-width: 552px;
+        width: 100%;
+    }
+}
+
+.rules {
+    border: solid 2px rgba(255, 255, 255, 0.05);
+    color: #ffffff99;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding: 40px;
+    gap: 20px;
+}
+
+h1.rulesTitle, h2.rulesTitle {
+    margin: 0;
+    color: #fff;
+}
+
+.container {
+    display: flex;
+    width: 80%;
+    align-items: flex-start;
+}
+
+p {
+    margin: 0;
+}
+
+span.number {
+    color: #fff;
+    font-weight: bolder;
+}
+
+span.punishment {
+    color: #c12c2c;
+}
+
+span.exception {
+    color: #ffbf5e;
+    font-weight: bold;
+}
+
+span.exception, span.note, span.punishment {
+    font-weight: bold;
+}
+
+span.note, span.note {
+    color: #ffeeba;
+    font-weight: bold;
+}
+
+span.punishment, span.punishment_chat, span.punishment_other {
+    color:rgb(207, 94, 94);
+}
+
+.second{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5rem;
+}
