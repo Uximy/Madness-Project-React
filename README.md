@@ -9,5 +9,5 @@
 Исходный код рангов. Ничего интересного.
 
 ## Ранги создавали:
-- [VLADIC2009](https://github.com/StarForge33)
-- [AkeYlake](https://github.com/AkeYlake)
+- Автор: [VLADIC2009](https://github.com/StarForge33)
+- Минимальный визуальные корректировки и интеграция в проект: [AkeYlake](https://github.com/AkeYlake)
