@@ -1,0 +1,82 @@
+$main_bg: #620659
+$two_stick: #ff3efa
+$border_bg: rgba(255,77,255, 0.7)
+$blur_bg: rgba(255,77,255, 0.3)
+$text_color: #ff4dff
+$text_shadow_color: black
+
+.rank1
+	display: flex
+	justify-content: center
+	align-items: center
+	.rank_bg
+		text-align: justify
+		position: relative
+		width: 70px
+		height: 30px
+		background-color: $main_bg
+		transform: skewX(-12deg)
+		border-right: 1px solid $border_bg
+		.top_bg
+			position: absolute
+			width: 61px
+			height: 1px
+			background-color: $border_bg
+			transform: translateX(9px)
+		.bot_bg
+			position: absolute
+			width: 61px
+			height: 1px
+			background-color: $border_bg
+			transform: translate(9px, 29px)
+		&::before
+			position: absolute
+			content: ''
+			height: 4px
+			width: 30px
+			background-color: $two_stick
+			transform: rotate(90deg) translate(+43%, +13px)
+		&::after
+			position: absolute
+			content: ''
+			height: 4px
+			width: 30px
+			background-color: $two_stick
+			transform: rotate(90deg) translate(+43%, +8px)
+			z-index: 2
+		.number
+			position: absolute
+			transform: translate(17px, 1px) skew(12deg)
+			color: $text_color
+			text-shadow: 0 0 2px $text_shadow_color
+			top: 2px
+			left: -6px
+			font-size: 16px
+			font-style: italic
+			.numberBig
+				font-size: 18px
+		.blur
+			position: absolute
+			width: 70px
+			height: 15px
+			background: linear-gradient(to bottom, $blur_bg, transparent 30%)
+			background-position: top
+			background-repeat: no-repeat
+			z-index: -1
+		.blur-2
+			position: absolute
+			width: 70px
+			height: 15px
+			background: linear-gradient(to top, $blur_bg, transparent 30%)
+			background-position: bottom
+			background-repeat: no-repeat
+			transform: translateY(15px)
+			z-index: -1
+		.blur-3
+			position: absolute
+			width: 29px
+			height: 15px
+			background: linear-gradient(to top, $blur_bg, transparent 80%)
+			background-repeat: no-repeat
+			transform: rotate(90deg) translate(+7px, 5px)
+			z-index: -1
