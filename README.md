@@ -90,4 +90,7 @@
 - [Uximy](https://github.com/Uximy)
 - [AkeYlake](https://github.com/AkeYlake)
 
+## Помогали с разработкой:
+- [VLADIC2009](https://github.com/StarForge33)
+
 Проект открыт для вклада в виде предложений и исправлений. Будем рады вашей помощи!
