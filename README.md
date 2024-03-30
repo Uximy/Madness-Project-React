@@ -10,4 +10,4 @@
 
 ## Ранги создавали:
 - Автор: [VLADIC2009](https://github.com/StarForge33)
-- Минимальный визуальные корректировки и интеграция в проект: [AkeYlake](https://github.com/AkeYlake)
+- Визуальные корректировки и интеграция в проект: [AkeYlake](https://github.com/AkeYlake)
