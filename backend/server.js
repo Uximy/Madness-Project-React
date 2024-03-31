@@ -20,10 +20,10 @@ const https = require('https'),
 const config = require('./config.json');
 
 const pool = mysql.createPool({
-    host: "ip_db",
-    user: "user_name",
-    database: "name_database_lvl_rank",
-    password: "password",
+    host: config.database_lvlrank.ip_db,
+    user: config.database_lvlrank.user,
+    database: config.database_lvlrank.database,
+    password: config.database_lvlrank.password,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
@@ -224,6 +224,7 @@ io.on('connection', async (sockets) => {
     sockets.on('join_stats', async () => {
         sockets.join('stats');
 
+        sockets.to('stats').emit('get_stats', top10Players); // Не работает
         sockets.emit('get_stats', top10Players); // Работает
 
         if(TimePassedStats) 
@@ -294,6 +295,8 @@ async (req, res) => {
 
     const profile = req.user.profile._json;
 
+    console.log(profile);
+
     const avatarGif = await getSteamAvatar(profile.profileurl);
 
     query(ReactDB, sql, [profile.steamid, profile.personaname, profile.avatar, profile.profileurl])
@@ -311,7 +314,7 @@ async (req, res) => {
 });
 
 app.post('/get-user-data', authenticateToken, async (req, res) => {
-    if (req.session.user) {
+    if (req.session.user) {;
         res.json({ user: req.session.user, avatarGif: await getSteamAvatar(req.session.user.profileurl) });
     }
 });
@@ -367,7 +370,7 @@ function generateSignature(merchantId, price, orderId, secretWord) {
 }
 
 app.post('/create_payment', async (req, res) => {
-    const { price, orderId, steamidUser , selectServer, steamUserName, expires } = req.body;
+    const { price, orderId, steamidUser , selectServer, steamUserName, expires, privilegesID } = req.body;
 
     // Параметры вашего магазина в Free-Kassa
     const merchantId = config.freekassa.merchantId;
@@ -389,7 +392,7 @@ app.post('/create_payment', async (req, res) => {
 
     let server = await query(ReactDB, sql, [selectServer]);
     console.log(server);
-    res.send(JSON.stringify({ type: 'redirect', url: `https://pay.freekassa.ru?m=${paymentData.m}&oa=${paymentData.oa}&currency=RUB&o=${paymentData.o}&s=${paymentData.s}&us_steamid=${steamidUser}&us_serverId=${server[0].id}&us_steamUserName=${steamUserName}&us_expires=${expires}` }));
+    res.send(JSON.stringify({ type: 'redirect', url: `https://pay.freekassa.ru?m=${paymentData.m}&oa=${paymentData.oa}&currency=RUB&o=${paymentData.o}&s=${paymentData.s}&us_privilegesID=${privilegesID}&us_steamid=${steamidUser}&us_serverId=${server[0].id}&us_steamUserName=${steamUserName}&us_expires=${expires}` }));
 });
 
 function generateCheckSignature(params, secretWord) {
@@ -401,8 +404,7 @@ function generateCheckSignature(params, secretWord) {
 app.get('/notification', async function (req, res) {
     const hbs = require('nodemailer-express-handlebars'),
     nodemailer = require('nodemailer'),
-    path = require('path'),
-    Rcon = require('rcon');
+    path = require('path');
 
     const data = req.query;
 
@@ -412,10 +414,8 @@ app.get('/notification', async function (req, res) {
         return logger.error('Неверная подпись');
     }
 
-    const orderId = data.MERCHANT_ORDER_ID;
-    const amount = data.AMOUNT;
-    const steamidUser = data.us_steamid;
     const serverId = data.us_serverId;
+    const privilegesID = data.us_privilegesID;
     let expires = data.us_expires;
 
     // expires.split(' ')[0] == 'Навсегда' ? 0 : Number(expires.split(' ')[0])
@@ -436,60 +436,97 @@ app.get('/notification', async function (req, res) {
 
     const handlerbarOptions = {
         viewEngine: {
-            partialsDir: path.resolve('./emailTemplate/'),
+            partialsDir: path.resolve('../emailTemplate/'),
             defaultLayout: false,
         },
-        viewPath: path.resolve('./emailTemplate/'),
+        viewPath: path.resolve('../emailTemplate/'),
     }
 
     transporter.use('compile', hbs(handlerbarOptions))
 
-
     //TODO переделать выдачу привилегии под cs2 реализацию
 
-    let sql = "SELECT `id`, `ip_port` FROM `Servers` WHERE `id` = ?";
+    let sql = "SELECT `id`, `ip_port`, `server_name` FROM `Servers` WHERE `id` = ?";
 
-    query(ReactDB, sql, [serverId]).then((server) => { 
-        const conn = new Rcon(server[0].ip_port.split(':')[0], server[0].ip_port.split(':')[1], config.rcon_password);
-        console.log(expires.split(' ')[0] == 'Навсегда' ? 0 : Number(expires.split(' ')[0]));
-        const mailOptions = {
-            from: `"Madness Project" <${config.mail.user}>`, // адрес отправителя
-            template: "success_buy", // имя файла шаблона, например, email.handlebars.
-            to: data.P_EMAIL,
-            subject: 'Покупка привилегии на Madness Project',
-            context: {
-                nickname: data.us_steamUserName,
-                key: 'Kv1QZW4j'
-            },
-        };
+    query(ReactDB, sql, [serverId]).then(async (server) => { 
+        const Rcon = require('rcon-srcds').default;     
+
+        const rcon_connection = new Rcon({ host: server[0].ip_port.split(':')[0], port: server[0].ip_port.split(':')[1], timeout: 5000 });
+        // Деавторизация RCON на сервер
+        const authenticationTimeout = setTimeout(async () => {
+            logger.error('RCON Authentication timed out', 1);
+            try {
+                await this.disconnect_rcon(1); // Disconnect the RCON connection
+                logger.info('Timed out, disconnected RCON', 1);
+            } catch (error) {
+                logger.error('Error disconnecting RCON', 1, error);
+            }
+        }, 10000);
+
         try {
-            transporter.sendMail(mailOptions).then((info) => {
-                logger.info("письмо отправилось: %s", info.messageId);
-            })
-        } catch (error) {
-            logger.error(`Ошибка Nodemailer при отправке электронной почты на `, error);
-        }
-        // conn.on('auth', function () {
-        //     // Вы должны подождать, пока это событие не будет запущено, прежде чем отправлять какие-либо команды,
-        //     // иначе эти команды завершится неудачно.
-        //     logger.info("Authenticated");
-        //     logger.info("Sending command: css_generatevip");
-        //     // создать ключ - css_generatevip <время в днях> <группа: 0-виптест, 1-вип, 2-делюкс>
-        //     conn.send(`css_generatevip ${expires.split(' ')[0] == 'Навсегда' ? 0 : Number(expires.split(' ')[0])} 1`);
-        // }).on('response', function (str) {
-        //     logger.info("Response: " + str);
+            //Авторизация RCON на сервер
+            await rcon_connection.authenticate(config.rcon_password);
             
-        // }).on('error', function (err) {
-        //     logger.error("Error: " + err);
-        // }).on('end', function () {
-        //     logger.warn("Connection closed");
-        //     conn.connect();
-        // });
-    })
-    
+            logger.info('RCON Authenticated', 1, server[0].ip_port.split(':')[0], server[0].ip_port.split(':')[1]);
+            const response = await Promise.race([
+                //создать ключ - css_generatevip <время в днях> <группа: 0-виптест, 1-вип, 2-делюкс>
+                rcon_connection.execute(`css_generatevip ${expires.split(' ')[0] == 'Навсегда' ? 0 : Number(expires.split(' ')[0])} ${privilegesID}`),
+                new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        resolve({ error: 'Command execution timed out' });
+                    }, 200);
+                }),
+            ]);
 
+            const regex = /Token: ([^\s]+)/;
+            const match = response.match(regex);
+            
+            const token = match[1];
+            clearTimeout(authenticationTimeout);
+
+            const mailOptions = {
+                from: `"Madness Project" <${config.mail.user}>`, // адрес отправителя
+                template: "success_buy", // имя файла шаблона, например, email.handlebars.
+                to: data.P_EMAIL,
+                subject: 'Покупка привилегии на Madness Project',
+                context: {
+                    nickname: data.us_steamUserName,
+                    key: token,
+                    discordurl: 'https://discord.gg/r6Ku2Fmq6Z'
+                },
+            };
+
+            try {
+                const json_logger = {
+                    'User Name': data.us_steamUserName,
+                    'User steam ID': data.us_steamid,
+                    'User Email': data.P_EMAIL,
+                    'Token key': token,
+                    'Price': data.AMOUNT,
+                    'commission': data.commission,
+                    'privilegesID': privilegesID,
+                    'Order ID': data.MERCHANT_ORDER_ID,
+                    'Expires': expires,
+                    'Server ID': serverId,
+                    'Server Name': server[0].server_name
+                }
+
+                logger.info(json_logger);
+
+                transporter.sendMail(mailOptions).then((info) => {
+                    logger.info("письмо отправилось: %s", info.messageId);
+                })
+            } catch (error) {
+                logger.error(`Ошибка Nodemailer при отправке электронной почты на `, error);
+            }
+
+            
+        } catch (error) {
+            clearTimeout(authenticationTimeout);
+            console.error('RCON Authentication failed', 1, error);
+        }
+    })
     //!выдача привилегии
-    
 
     // css_activator
     // активировать випку - !activator <ключ из css_generatevip>
